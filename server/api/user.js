@@ -1,6 +1,20 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
 
+router.get('/api/users', async (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    try {
+        const users = await User.findAll({
+            order: [
+                ['username', 'ASC']
+            ]
+        })
+        res.status(200).send(users)
+    } catch (error) {
+        res.send(error.message)
+    }
+})
+
 router.get('/api/:username', async (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     try {
@@ -14,11 +28,11 @@ router.get('/api/:username', async (req, res) => {
     }
 })
 
-router.get('/api/:username', async(req, res) => {
-    try{
+router.get('/api/:username', async (req, res) => {
+    try {
         const userInfo = await User.findByPk(req.params.username)
         res.status(200).send(planet)
-    } catch(error) {
+    } catch (error) {
         res.status(404).send(error.message)
     }
 })
@@ -42,7 +56,7 @@ router.post('/api/register', async (req, res) => {
     try {
         const newUser = await User.create(req.body)
         res.json(newUser)
-        res.send({newUser}) //bew
+        res.send({ newUser }) //bew
     } catch (error) {
         res.send(error.message)
     }
