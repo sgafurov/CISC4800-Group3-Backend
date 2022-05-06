@@ -1,8 +1,16 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
 
+router.get('/test', async (req, res) => {
+    try {
+        res.send('HELLO')
+    } catch (error) {
+        res.send(error.message)
+    }
+})
+
 router.get('/api/users', async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Origin", "*");
     try {
         const users = await User.findAll({
             order: [
@@ -15,23 +23,23 @@ router.get('/api/users', async (req, res) => {
     }
 })
 
-router.get('/api/:username', async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    try {
-        const userInfo = await User.findOne({
-            where: { username: req.params.username },
-            attributes: ['username']
-        })
-        res.send(userInfo)
-    } catch (error) {
-        res.send(error.message)
-    }
-})
+// router.get('/api/:username', async (req, res) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     try {
+//         const userInfo = await User.findOne({
+//             where: { username: req.params.username },
+//             attributes: ['username']
+//         })
+//         res.send(userInfo)
+//     } catch (error) {
+//         res.send(error.message)
+//     }
+// })
 
 router.get('/api/:username', async (req, res) => {
     try {
         const userInfo = await User.findByPk(req.params.username)
-        res.status(200).send(planet)
+        res.status(200).send(userInfo)
     } catch (error) {
         res.status(404).send(error.message)
     }
@@ -56,7 +64,7 @@ router.post('/api/register', async (req, res) => {
     try {
         const newUser = await User.create(req.body)
         res.json(newUser)
-        res.send({ newUser }) //bew
+        res.send({ newUser }) //new
     } catch (error) {
         res.send(error.message)
     }
