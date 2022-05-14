@@ -17,7 +17,7 @@ URI postgres://njweyjexkafpcb:00c6b9ac71dd4ab3f9e7fbab1f0b16444d1fcaebf466575d5c
 Heroku CLI heroku pg:psql postgresql-transparent-29164 --app postgresrmatest
 */
 
-const db = new Sequelize(DBURL, {
+const db = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
   dialect: 'postgres',
   protocol: 'postgres',
   dialectOptions: {
