@@ -1,7 +1,7 @@
 const router = require('express').Router()
-const User = require('../db/models/user')
+const User = require('../db/user')
 
-router.get('/test', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         res.send('HELLO')
     } catch (error) {
@@ -9,64 +9,52 @@ router.get('/test', async (req, res) => {
     }
 })
 
-router.get('/api/users', async (req, res) => {
-    // res.header("Access-Control-Allow-Origin", "*");
+router.get('/users', async (req, res) => {
     try {
-        const users = await User.findAll({
-            order: [
-                ['username', 'ASC']
-            ]
-        })
+        // const users = await User.findAll({
+        //     order: [
+        //         ['username', 'ASC']
+        //     ]
+        // })
+        const users = await User.findAll()
         res.status(200).send(users)
     } catch (error) {
         res.send(error.message)
     }
 })
 
-// router.get('/api/:username', async (req, res) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     try {
-//         const userInfo = await User.findOne({
-//             where: { username: req.params.username },
-//             attributes: ['username']
-//         })
-//         res.send(userInfo)
-//     } catch (error) {
-//         res.send(error.message)
-//     }
-// })
-
-router.get('/api/:username', async (req, res) => {
+router.get('/:username', async (req, res) => {
+    console.log('inside get by username route', req.params)
     try {
         const userInfo = await User.findByPk(req.params.username)
-        res.status(200).send(userInfo)
+        if (!userInfo) {
+            throw { status: 400, message: 'This user does not exist.' }
+        }
+        res.status(200).json(userInfo)
     } catch (error) {
-        res.status(404).send(error.message)
+        if (error.status == 400) {
+            res.status(400).json(error)
+        } else {
+            res.status(500).json(error)
+        }
     }
 })
 
-// router.get('/login/:username', async (req, res) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-
-//     try {
-//         const userInfo = await User.findOne({
-//             where: { username: req.params.username },
-//             attributes: ['password']
-//         })
-//         res.send(userInfo)
-//     } catch (error) {
-//         res.send(error.message)
-//     }
-// })
-
-router.post('/api/register', async (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
+router.post('/register', async (req, res) => {
+    console.log('inside register route', req.body)
     try {
+        const findUser = await User.findByPk(req.body.username)
+        if (findUser) {
+            throw { status: 400, message: 'This user already exists.' }
+        }
         const newUser = await User.create(req.body)
-        res.json(newUser)
-        res.send({ newUser }) //new
+        res.status(200).json(newUser)
     } catch (error) {
-        res.send(error.message)
+        if (error.status == 400) {
+            res.status(400).json(error)
+        } else {
+            res.status(500).json(error)
+        }
     }
 })
 

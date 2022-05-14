@@ -1,15 +1,12 @@
 const Sequelize = require('sequelize')
-const database = require('../database')
+const database = require('./database')
 
 const User = database.define('user', {
 
     username: {
         type: Sequelize.STRING,
-        allowNull : false,
-        primaryKey : true,
-        validate: {
-            notEmpty: true
-        }
+        allowNull: false,
+        primaryKey: true,
         // validate: {
         //     notEmpty: true,
         //     len: [5, 12]
@@ -18,16 +15,13 @@ const User = database.define('user', {
 
     password: {
         type: Sequelize.TEXT,
-        allowNull : false,
-        validate: {
-            notEmpty: true
-        }
+        allowNull: false,
         // validate: {
         //     notEmpty: true,
         //     len: [8, 20]
         // }
-    },
+    }
 
-})
+}, { database, createdAt: false, updatedAt: false })
 
 module.exports = User
