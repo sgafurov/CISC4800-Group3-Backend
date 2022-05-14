@@ -17,34 +17,34 @@ URI postgres://njweyjexkafpcb:00c6b9ac71dd4ab3f9e7fbab1f0b16444d1fcaebf466575d5c
 Heroku CLI heroku pg:psql postgresql-transparent-29164 --app postgresrmatest
 */
 
-// const db = new Sequelize(DBURL, {
-//   dialect: 'postgres',
-//   protocol: 'postgres',
-//   dialectOptions: {
-//     ssl: {
-//       require: true,
-//       rejectUnauthorized: false
-//     },
-//   },
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     idle: 10000
-//   },
-//   logging: false
-// });
-
-const db = new Sequelize('weather_app_db', 'postgres', 'password', {
-  host: 'localhost',
+const db = new Sequelize(DBURL, {
   dialect: 'postgres',
   protocol: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    },
+  },
   pool: {
     max: 5,
     min: 0,
     idle: 10000
   },
   logging: false
-})
+});
+
+// const db = new Sequelize('weather_app_db', 'postgres', 'password', {
+//   host: 'localhost',
+//   dialect: 'postgres',
+//   protocol: 'postgres',
+//   pool: {
+//     max: 5,
+//     min: 0,
+//     idle: 10000
+//   },
+//   logging: false
+// })
 
 db
   .authenticate()
