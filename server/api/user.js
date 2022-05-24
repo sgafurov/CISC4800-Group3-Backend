@@ -45,18 +45,16 @@ router.post('/login', async (req, res) => {
     try {
         const userInfo = await User.findByPk(req.body.username)
         if (!userInfo) {
-            throw { status: 400, message: 'This user does not exist.' }
+            res.status(400)
+            throw { message: 'This user does not exist.' }
         }
         if (userInfo.password != req.body.password) {
-            throw { status: 400, message: 'The password does not match.' }
+            res.status(400)
+            throw { message: 'The password does not match.' }
         }
         res.status(200).json(userInfo)
     } catch (error) {
-        if (error.status == 400) {
-            res.status(400).json(error)
-        } else {
-            res.status(500).json(error)
-        }
+            res.json(error) //error objects are composed of status codes and messages
     }
 })
 
