@@ -35,6 +35,7 @@ const db = new Sequelize('postgres://vikduugkssveon:2c9b6a913355e40012246ebd6d3e
   logging: false
 });
 
+//LOCAL POSTGRESS DB
 // const db = new Sequelize('weather_app_db', 'postgres', 'password', {
 //   host: 'localhost',
 //   dialect: 'postgres',
